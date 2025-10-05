@@ -1,0 +1,8 @@
+BETTER_AUTH_SECRET=i7rvvfLM5Z8HZdW63ku2UkpXudeGSD0f
+
+DATABASE_URL=postgresql://postgres:bfcfdna3@localhost:5432/nuxt-travel?schema=public
+BETTER_AUTH_URL=http://localhost:3000 # Base URL of your app
+
+
+GITHUB_CLIENT_ID=Ov23lirL5QvbjqM3pviP
+GITHUB_CLIENT_SECRET=f583f9b948792a18553dda3dd5a470280f85082a
