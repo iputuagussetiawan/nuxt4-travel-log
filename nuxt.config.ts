@@ -13,7 +13,15 @@ export default defineNuxtConfig({
     vite: {
         plugins: [tailwindcss()]
     },
-    modules: ['@nuxt/eslint', 'shadcn-nuxt', 'nuxt-lucide-icons'],
+    modules: [
+        '@nuxt/eslint',
+        'shadcn-nuxt',
+        '@nuxtjs/color-mode',
+        'nuxt-lucide-icons'
+    ],
+    colorMode: {
+        classSuffix: ''
+    },
     shadcn: {
         /**
          * Prefix for all the imported component
