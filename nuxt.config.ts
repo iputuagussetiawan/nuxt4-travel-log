@@ -9,6 +9,19 @@ export default defineNuxtConfig({
         plugins: [tailwindcss()]
     },
     modules: ['@nuxt/eslint'],
+    $production: {
+        routeRules: {
+            '/**': { isr: true }
+        }
+    },
+    $development: {
+        //
+    },
+    $env: {
+        staging: {
+            //
+        }
+    },
     eslint: {
         // options here
         // checker: true
