@@ -13,7 +13,18 @@ export default defineNuxtConfig({
     vite: {
         plugins: [tailwindcss()]
     },
-    modules: ['@nuxt/eslint'],
+    modules: ['@nuxt/eslint', 'shadcn-nuxt', 'nuxt-lucide-icons'],
+    shadcn: {
+        /**
+         * Prefix for all the imported component
+         */
+        prefix: '',
+        /**
+         * Directory that the component lives in.
+         * @default "./shadcn/ui"
+         */
+        componentDir: './shadcn/ui'
+    },
     $production: {
         routeRules: {
             '/**': { isr: true }
