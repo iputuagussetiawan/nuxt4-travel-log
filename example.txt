@@ -1,0 +1,8 @@
+BETTER_AUTH_SECRET=i7rvvfLM5Z8HZdW63ku2UkpXudeGSD0f
+
+DATABASE_URL=postgresql://neondb_owner:npg_YOTtCaDhW89B@ep-withered-sky-a1j06hcq-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+BETTER_AUTH_URL=http://localhost:3000 # Base URL of your app
+
+
+GITHUB_CLIENT_ID=Ov23lirL5QvbjqM3pviP
+GITHUB_CLIENT_SECRET=f583f9b948792a18553dda3dd5a470280f85082a
