@@ -1,11 +1,11 @@
 import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
-export const location = pgTable('location', {
+import { locationLog } from './location-log-schema'
+export const locationLogImage = pgTable('locationLogImage', {
     id: uuid('id').primaryKey(),
-    name: text('name').notNull(),
-    description: text('description'),
-    slug: text('slug').notNull().unique(),
-    lat: text('lat').notNull(),
-    long: text('long').notNull(),
+    key: text('key').notNull(),
+    locationLogId: uuid('location_log_id')
+        .notNull()
+        .references(() => locationLog.id, { onDelete: 'cascade' }),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at')
         .defaultNow()
