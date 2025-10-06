@@ -56,3 +56,14 @@ export const verification = pgTable('verification', {
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at').defaultNow().notNull()
 })
+
+export const book = pgTable('book', {
+    id: text('id').primaryKey(),
+    title: text('title').notNull(),
+    author: text('author').notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at')
+        .defaultNow()
+        .$onUpdate(() => /* @__PURE__ */ new Date())
+        .notNull()
+})
