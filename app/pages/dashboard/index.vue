@@ -1,17 +1,11 @@
-<script setup lang="ts">
-import UiAuthButton from '~/components/ui/AuthButton.vue'
-import { authClient } from '@/lib/auth-client'
-const session = authClient.useSession()
+<script lang="ts">
+definePageMeta({
+    layout: 'dashboard'
+})
 </script>
 
 <template>
     <div>
-        <UiAuthButton v-if="!session?.data" />
-        <div>
-            <pre>{{ session.data }}</pre>
-            <button v-if="session.data" @click="authClient.signOut()">
-                Sign out
-            </button>
-        </div>
+        <h1>Halow</h1>
     </div>
 </template>
