@@ -15,10 +15,11 @@ export default defineNuxtConfig({
         plugins: [tailwindcss()]
     },
     modules: [
-        '@nuxt/eslint',
-        'shadcn-nuxt',
-        '@nuxtjs/color-mode',
-        'nuxt-lucide-icons'
+      '@nuxt/eslint',
+      'shadcn-nuxt',
+      '@nuxtjs/color-mode',
+      'nuxt-lucide-icons',
+      '@pinia/nuxt'
     ],
     colorMode: {
         classSuffix: ''

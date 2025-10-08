@@ -18,6 +18,8 @@ import {
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 
+import UiAuthButton from '~/components/ui/AuthButton.vue'
+
 const colorMode = useColorMode()
 
 const components: { title: string; href: string; description: string }[] = [
@@ -185,12 +187,7 @@ const components: { title: string; href: string; description: string }[] = [
                 </NavigationMenuContent>
             </NavigationMenuItem>
             <NavigationMenuItem>
-                <NavigationMenuLink
-                    href="/docs/introduction"
-                    :class="navigationMenuTriggerStyle()"
-                >
-                    Documentation
-                </NavigationMenuLink>
+                <UiAuthButton />
             </NavigationMenuItem>
         </NavigationMenuList>
 
