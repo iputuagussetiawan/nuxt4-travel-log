@@ -32,6 +32,13 @@ const props = defineProps<{
     }
 }>()
 
+const authStore = useAuthStore()
+const user = {
+    name: authStore?.user?.name || 'User',
+    email: authStore?.user?.email || 'm@example.com',
+    avatar: authStore?.user?.image || 'https://github.com/unovue.png'
+}
+
 const { isMobile } = useSidebar()
 </script>
 
@@ -44,22 +51,7 @@ const { isMobile } = useSidebar()
                         size="lg"
                         class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                     >
-                        <Avatar class="h-8 w-8 rounded-lg">
-                            <AvatarImage :src="user.avatar" :alt="user.name" />
-                            <AvatarFallback class="rounded-lg">
-                                CN
-                            </AvatarFallback>
-                        </Avatar>
-                        <div
-                            class="grid flex-1 text-left text-sm leading-tight"
-                        >
-                            <span class="truncate font-semibold">{{
-                                user.name
-                            }}</span>
-                            <span class="truncate text-xs">{{
-                                user.email
-                            }}</span>
-                        </div>
+                        <UiUserAvatar />
                         <ChevronsUpDown class="ml-auto size-4" />
                     </SidebarMenuButton>
                 </DropdownMenuTrigger>
@@ -70,29 +62,7 @@ const { isMobile } = useSidebar()
                     :side-offset="4"
                 >
                     <DropdownMenuLabel class="p-0 font-normal">
-                        <div
-                            class="flex items-center gap-2 px-1 py-1.5 text-left text-sm"
-                        >
-                            <Avatar class="h-8 w-8 rounded-lg">
-                                <AvatarImage
-                                    :src="user.avatar"
-                                    :alt="user.name"
-                                />
-                                <AvatarFallback class="rounded-lg">
-                                    CN
-                                </AvatarFallback>
-                            </Avatar>
-                            <div
-                                class="grid flex-1 text-left text-sm leading-tight"
-                            >
-                                <span class="truncate font-semibold">{{
-                                    user.name
-                                }}</span>
-                                <span class="truncate text-xs">{{
-                                    user.email
-                                }}</span>
-                            </div>
-                        </div>
+                        <UiUserAvatar />
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
@@ -117,9 +87,11 @@ const { isMobile } = useSidebar()
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>
-                        <LogOut />
-                        Log out
+                    <DropdownMenuItem asChild>
+                        <NuxtLink to="/sign-out">
+                            <LucideLogOut />
+                            Sign out
+                        </NuxtLink>
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>

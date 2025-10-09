@@ -24,13 +24,17 @@ const props = withDefaults(defineProps<SidebarProps>(), {
     collapsible: 'icon'
 })
 
+const authStore = useAuthStore()
+
+const userData = {
+    name: authStore?.user?.name,
+    email: authStore?.user?.email,
+    avatar: authStore?.user?.image
+}
+
 // This is sample data.
 const data = {
-    user: {
-        name: 'shadcn',
-        email: 'm@example.com',
-        avatar: '/avatars/shadcn.jpg'
-    },
+    userData,
     teams: {
         name: 'Acme Inc',
         logo: GalleryVerticalEnd,
@@ -152,7 +156,7 @@ const data = {
             <NavMain :items="data.navMain" />
         </SidebarContent>
         <SidebarFooter>
-            <NavUser :user="data.user" />
+            <NavUser :user="data.userData" />
         </SidebarFooter>
         <SidebarRail />
     </Sidebar>
