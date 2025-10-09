@@ -13,33 +13,54 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator
 } from '~/components/ui/breadcrumb'
+import { Button } from '~/components/ui/button'
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
 import { Separator } from '~/components/ui/separator'
+import { Icon } from '@iconify/vue'
+import ThemeToggle from '~/components/ui/ThemeToggle.vue'
+
 const authStore = useAuthStore()
 await authStore.init()
+const colorMode = useColorMode()
 </script>
 <template>
     <SidebarProvider>
         <AppSidebar />
         <SidebarInset>
             <header
-                class="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12"
+                class="sticky top-0 z-40 flex border-b h-16 shrink-0 items-center gap-2 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12"
             >
-                <div class="flex items-center gap-2 px-4">
-                    <SidebarTrigger class="-ml-1" />
-                    <Separator orientation="vertical" class="mr-2 h-4" />
-                    <Breadcrumb>
-                        <BreadcrumbList>
-                            <BreadcrumbItem class="hidden md:block">
-                                <BreadcrumbLink href="#">
-                                    Building Your Application
-                                </BreadcrumbLink>
-                            </BreadcrumbItem>
-                            <BreadcrumbSeparator class="hidden md:block" />
-                            <BreadcrumbItem>
-                                <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                            </BreadcrumbItem>
-                        </BreadcrumbList>
-                    </Breadcrumb>
+                <div
+                    class="flex items-center gap-2 px-4 justify-between w-full"
+                >
+                    <div class="flex items-center gap-2">
+                        <SidebarTrigger class="-ml-1" />
+
+                        <Separator orientation="vertical" class="mr-2 h-4" />
+                        <Breadcrumb>
+                            <BreadcrumbList>
+                                <BreadcrumbItem class="hidden md:block">
+                                    <BreadcrumbLink href="#">
+                                        Building Your Application
+                                    </BreadcrumbLink>
+                                </BreadcrumbItem>
+                                <BreadcrumbSeparator class="hidden md:block" />
+                                <BreadcrumbItem>
+                                    <BreadcrumbPage
+                                        >Data Fetching</BreadcrumbPage
+                                    >
+                                </BreadcrumbItem>
+                            </BreadcrumbList>
+                        </Breadcrumb>
+                    </div>
+                    <div>
+                        <ThemeToggle />
+                    </div>
                 </div>
             </header>
             <main>
