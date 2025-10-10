@@ -7,7 +7,8 @@ import {
     Map,
     PieChart,
     Settings2,
-    SquareTerminal
+    SquareTerminal,
+    MapIcon
 } from 'lucide-vue-next'
 import {
     Sidebar,
@@ -42,21 +43,17 @@ const data = {
     },
     navMain: [
         {
-            title: 'Playground',
+            title: 'Travel Location',
             url: '#',
-            icon: SquareTerminal,
+            icon: MapIcon,
             isActive: true,
             items: [
                 {
-                    title: 'History',
-                    url: '#'
+                    title: 'All Location',
+                    url: '/dashboard/location'
                 },
                 {
-                    title: 'Starred',
-                    url: '#'
-                },
-                {
-                    title: 'Settings',
+                    title: 'Add Location',
                     url: '#'
                 }
             ]
