@@ -46,7 +46,10 @@ const sidebarStore = useSidebarStore()
                             </template>
 
                             <template
-                                v-else-if="sidebarStore.sidebarItems.length"
+                                v-if="
+                                    !sidebarStore.loading &&
+                                    sidebarStore.sidebarItems.length
+                                "
                             >
                                 <SidebarMenuSubItem
                                     v-for="subItem in sidebarStore.sidebarItems"

@@ -43,7 +43,10 @@ onMounted(() => {
 <template>
     <section>
         <div class="mt-4 px-4">
-            <div class="flex justify-between items-center">
+            <div
+                v-if="locations && locations.length > 0"
+                class="flex justify-between items-center"
+            >
                 <div>
                     <h1 class="text-lg font-bold">List Location</h1>
                     <p class="text-sm text-muted-foreground">
