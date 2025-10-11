@@ -18,6 +18,7 @@ import { Alert, AlertDescription, AlertTitle } from '~/components/ui/alert'
 import { AlertCircle } from 'lucide-vue-next'
 
 //2.modules init
+const { $csrfFetch } = useNuxtApp()
 definePageMeta({
     layout: 'dashboard'
 })
@@ -25,6 +26,7 @@ definePageMeta({
 const router = useRouter()
 const submitError = ref('')
 const loading = ref(false)
+const submitted = ref(false)
 const formSchema = toTypedSchema(InsertLocationSchema)
 const { isFieldDirty, handleSubmit, meta } = useForm({
     validationSchema: formSchema
@@ -35,11 +37,12 @@ const onSubmit = handleSubmit(async (values) => {
     try {
         submitError.value = ''
         loading.value = true
-        const inserted = await $fetch('/api/locations', {
+        await $csrfFetch('/api/locations', {
             method: 'POST',
             body: values
         })
-        console.log(inserted)
+        submitted.value = true
+        navigateTo(`/dashboard/locations`)
     } catch (e) {
         const error = e as FetchError
         // console.log(error.data.data)
@@ -52,7 +55,7 @@ const onSubmit = handleSubmit(async (values) => {
 
 //4.events
 onBeforeRouteLeave(() => {
-    if (meta.value.dirty) {
+    if (!submitted.value && meta.value.dirty) {
         const confirm = window.confirm('Are you sure you want to leave?')
         if (!confirm) {
             return false
