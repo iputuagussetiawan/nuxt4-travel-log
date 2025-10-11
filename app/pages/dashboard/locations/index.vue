@@ -27,28 +27,16 @@ import {
 
 import { cn } from '~/lib/utils'
 import { Skeleton } from '~/components/ui/skeleton'
-
-const { data, status } = await useFetch('/api/locations', {
-    lazy: true
-})
-
-const sidebarStore = useSidebarStore()
-
-watchEffect(() => {
-    if (data.value) {
-        sidebarStore.sidebarItems = data.value.map((location) => ({
-            id: `location-${location.id}`,
-            label: location.name,
-            icon: 'tabler:map-pin-filled',
-            href: '#'
-        }))
-    }
-    sidebarStore.loading = status.value === 'pending'
-})
+const locationsStore = useLocationsStore()
+const { locations, status } = storeToRefs(locationsStore)
 
 //2.modules init
 definePageMeta({
     layout: 'dashboard'
+})
+
+onMounted(() => {
+    locationsStore.refresh()
 })
 </script>
 
@@ -92,12 +80,12 @@ definePageMeta({
                 </Card>
             </div>
             <div
-                v-else-if="data && data.length > 0"
+                v-else-if="locations && locations.length > 0"
                 class="grid grid-cols-6 gap-4 mt-6"
             >
                 <!-- <pre>{{ data }}</pre> -->
                 <Card
-                    v-for="location in data"
+                    v-for="location in locations"
                     :key="location.id"
                     class="bg-primary/10 hover:bg-primary/20 cursor-pointer transition-all duration-400 ease-in-out"
                 >

@@ -16,24 +16,6 @@ import {
 import { Separator } from '~/components/ui/separator'
 import ThemeToggle from '~/components/ui/ThemeToggle.vue'
 
-const { data, status } = await useFetch('/api/locations', {
-    lazy: true
-})
-
-const sidebarStore = useSidebarStore()
-
-watchEffect(() => {
-    if (data.value) {
-        sidebarStore.sidebarItems = data.value.map((location) => ({
-            id: `location-${location.id}`,
-            label: location.name,
-            icon: 'tabler:map-pin-filled',
-            href: '#'
-        }))
-    }
-    sidebarStore.loading = status.value === 'pending'
-})
-
 const authStore = useAuthStore()
 await authStore.init()
 </script>
