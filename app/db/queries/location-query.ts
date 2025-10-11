@@ -4,6 +4,10 @@ import { db } from '~/db'
 import { InsertLocationSchema, location } from '~/db/schema'
 import { randomUUID } from 'node:crypto'
 
+export async function findLocations(userId: string) {
+    return await db.select().from(location).where(eq(location.userId, userId))
+}
+
 export async function findLocationByName(
     existingLocation: InsertLocationSchema,
     userId: string
