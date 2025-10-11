@@ -1,6 +1,17 @@
-import { InsertLocationSchema } from '~/db/schema'
+import { randomUUID } from 'node:crypto'
+import { db } from '~/db'
+import { InsertLocationSchema, location } from '~/db/schema'
 
 export default defineEventHandler(async (event) => {
+    if (!event.context.user) {
+        return sendError(
+            event,
+            createError({
+                statusCode: 401,
+                statusMessage: 'Unauthorized'
+            })
+        )
+    }
     const result = await readValidatedBody(
         event,
         InsertLocationSchema.safeParse
@@ -28,5 +39,17 @@ export default defineEventHandler(async (event) => {
         )
     }
 
-    return result.data
+    const [createdLocation] = await db
+        .insert(location)
+        .values({
+            ...result.data,
+            id: randomUUID(),
+            slug: result.data.name.replaceAll(' ', '-').toLowerCase(),
+            userId: event.context.user.id,
+            createdAt: new Date(),
+            updatedAt: new Date()
+        })
+        .returning()
+
+    return createdLocation
 })

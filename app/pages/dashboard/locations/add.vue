@@ -1,12 +1,8 @@
 <script setup lang="ts">
+//1.modules import
 import { toTypedSchema } from '@vee-validate/zod'
 import { useForm } from 'vee-validate'
 import type { FetchError } from 'ofetch'
-
-definePageMeta({
-    layout: 'dashboard'
-})
-
 import { Button } from '@/components/ui/button'
 import {
     FormControl,
@@ -21,15 +17,20 @@ import { InsertLocationSchema } from '~/db/schema'
 import { Alert, AlertDescription, AlertTitle } from '~/components/ui/alert'
 import { AlertCircle } from 'lucide-vue-next'
 
+//2.modules init
+definePageMeta({
+    layout: 'dashboard'
+})
+
 const router = useRouter()
 const submitError = ref('')
 const loading = ref(false)
 const formSchema = toTypedSchema(InsertLocationSchema)
-
 const { isFieldDirty, handleSubmit, meta } = useForm({
     validationSchema: formSchema
 })
 
+//3.methods
 const onSubmit = handleSubmit(async (values) => {
     try {
         submitError.value = ''
@@ -49,6 +50,7 @@ const onSubmit = handleSubmit(async (values) => {
     }
 })
 
+//4.events
 onBeforeRouteLeave(() => {
     if (meta.value.dirty) {
         const confirm = window.confirm('Are you sure you want to leave?')
