@@ -8,6 +8,7 @@ import {
 } from 'drizzle-orm/pg-core'
 import { user } from './auth-schema'
 import { createInsertSchema } from 'drizzle-zod'
+import type z from 'zod'
 export const location = pgTable(
     'location',
     {
@@ -43,3 +44,5 @@ export const InsertLocationSchema = createInsertSchema(location, {
     // lat: true,
     // long: true
 })
+
+export type InsertLocationSchema = z.infer<typeof InsertLocationSchema>

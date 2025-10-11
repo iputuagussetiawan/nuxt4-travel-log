@@ -1,9 +1,8 @@
-import { and, eq, type DrizzleError } from 'drizzle-orm'
-import { randomUUID } from 'node:crypto'
-import { db } from '~/db'
-import { InsertLocationSchema, location } from '~/db/schema'
+import { type DrizzleError } from 'drizzle-orm'
+import { InsertLocationSchema } from '~/db/schema'
 import slugify from 'slug'
 import { nanoid } from 'nanoid'
+import { findLocationByName, insertLocation } from '~/db/queries/location-query'
 
 export default defineEventHandler(async (event) => {
     if (!event.context.user) {
@@ -46,16 +45,10 @@ export default defineEventHandler(async (event) => {
         lower: true
     })
 
-    const existingLocation = await db
-        .select()
-        .from(location)
-        .where(
-            and(
-                eq(location.name, result.data.name),
-                eq(location.userId, event.context.user.id)
-            )
-        )
-        .limit(1)
+    const existingLocation = await findLocationByName(
+        result.data,
+        event.context.user.id
+    )
     if (existingLocation.length > 0) {
         return sendError(
             event,
@@ -67,18 +60,8 @@ export default defineEventHandler(async (event) => {
     }
 
     try {
-        const [createdLocation] = await db
-            .insert(location)
-            .values({
-                ...result.data,
-                id: randomUUID(),
-                slug: newSlug,
-                userId: event.context.user.id,
-                createdAt: new Date(),
-                updatedAt: new Date()
-            })
-            .returning()
-        return createdLocation
+        //call query insert location from db/query
+        return insertLocation(result.data, newSlug, event.context.user.id)
     } catch (e) {
         const error = e as DrizzleError
         if (error.message) {
