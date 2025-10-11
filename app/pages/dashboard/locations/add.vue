@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { toTypedSchema } from '@vee-validate/zod'
 import { useForm } from 'vee-validate'
-import * as z from 'zod'
+import type { FetchError } from 'ofetch'
 
 definePageMeta({
     layout: 'dashboard'
@@ -10,72 +10,162 @@ definePageMeta({
 import { Button } from '@/components/ui/button'
 import {
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
     FormMessage
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { InsertLocationSchema } from '~/db/schema'
+import { Alert, AlertDescription, AlertTitle } from '~/components/ui/alert'
+import { AlertCircle } from 'lucide-vue-next'
 
-const formSchema = toTypedSchema(
-    z.object({
-        username: z.string().min(2).max(50),
-        password: z.string().min(2).max(50)
-    })
-)
+const router = useRouter()
+const submitError = ref('')
+const loading = ref(false)
+const formSchema = toTypedSchema(InsertLocationSchema)
 
-const { isFieldDirty, handleSubmit } = useForm({
+const { isFieldDirty, handleSubmit, meta } = useForm({
     validationSchema: formSchema
 })
 
-const onSubmit = handleSubmit((values) => {
-    console.log(values)
+const onSubmit = handleSubmit(async (values) => {
+    try {
+        submitError.value = ''
+        loading.value = true
+        const inserted = await $fetch('/api/locations', {
+            method: 'POST',
+            body: values
+        })
+        console.log(inserted)
+    } catch (e) {
+        const error = e as FetchError
+        // console.log(error.data.data)
+        // console.error(error.statusMessage)
+        submitError.value = error.statusMessage || 'An unknown error occurred'
+    } finally {
+        loading.value = false
+    }
+})
+
+onBeforeRouteLeave(() => {
+    if (meta.value.dirty) {
+        const confirm = window.confirm('Are you sure you want to leave?')
+        if (!confirm) {
+            return false
+        }
+    }
+    return true
 })
 </script>
 
 <template>
     <section>
-        <div class="container mx-auto">
-            <h1>Add Location</h1>
-            <form class="w-2/3 space-y-6" @submit="onSubmit">
-                <FormField
-                    v-slot="{ componentField }"
-                    name="username"
-                    :validate-on-blur="!isFieldDirty"
-                >
-                    <FormItem>
-                        <FormLabel>Username</FormLabel>
-                        <FormControl>
-                            <Input
-                                type="text"
-                                placeholder="shadcn"
-                                v-bind="componentField"
-                            />
-                        </FormControl>
-                        <FormMessage />
-                    </FormItem>
-                </FormField>
+        <div class="mt-4 px-4">
+            <h1 class="text-lg font-bold">Add Location</h1>
+            <p class="text-sm text-muted-foreground">Add a new location here</p>
+            <div class="max-w-xl mx-auto">
+                <Alert v-if="submitError" variant="destructive" class="mb-4">
+                    <AlertCircle class="w-4 h-4" />
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription>
+                        {{ submitError }}
+                    </AlertDescription>
+                </Alert>
+                <form class="space-y-6" @submit.prevent="onSubmit">
+                    <fieldset :disabled="loading" class="space-y-6">
+                        <FormField
+                            v-slot="{ componentField }"
+                            name="name"
+                            :validate-on-blur="!isFieldDirty"
+                            :disabled="loading"
+                        >
+                            <FormItem>
+                                <FormLabel>Title</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        type="text"
+                                        placeholder="Your Location Name"
+                                        v-bind="componentField"
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        </FormField>
+                        <FormField
+                            v-slot="{ componentField }"
+                            name="description"
+                            :validate-on-blur="!isFieldDirty"
+                        >
+                            <FormItem>
+                                <FormLabel>Description</FormLabel>
+                                <FormControl>
+                                    <Textarea
+                                        placeholder="Type your description here."
+                                        v-bind="componentField"
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        </FormField>
 
-                <FormField
-                    v-slot="{ componentField }"
-                    name="password"
-                    :validate-on-blur="!isFieldDirty"
-                >
-                    <FormItem>
-                        <FormLabel>Password</FormLabel>
-                        <FormControl>
-                            <Input
-                                type="text"
-                                placeholder="shadcn"
-                                v-bind="componentField"
-                            />
-                        </FormControl>
-                        <FormMessage />
-                    </FormItem>
-                </FormField>
-                <Button type="submit"> Submit </Button>
-            </form>
+                        <FormField
+                            v-slot="{ componentField }"
+                            name="lat"
+                            :validate-on-blur="!isFieldDirty"
+                        >
+                            <FormItem>
+                                <FormLabel>Latitude</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        type="number"
+                                        placeholder="Latitude"
+                                        v-bind="componentField"
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        </FormField>
+                        <FormField
+                            v-slot="{ componentField }"
+                            name="long"
+                            :validate-on-blur="!isFieldDirty"
+                        >
+                            <FormItem>
+                                <FormLabel>Longitude</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        type="number"
+                                        placeholder="Longitude"
+                                        v-bind="componentField"
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        </FormField>
+
+                        <div class="flex justify-between">
+                            <Button
+                                :disabled="loading"
+                                type="button"
+                                variant="outline"
+                                @click="router.back()"
+                            >
+                                Cancel
+                            </Button>
+                            <Button :disabled="loading" type="submit">
+                                Submit
+                                <LucideLoader2
+                                    v-if="loading"
+                                    class="animate-spin"
+                                />
+                                <LucideCirclePlus v-else />
+                            </Button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
         </div>
     </section>
 </template>

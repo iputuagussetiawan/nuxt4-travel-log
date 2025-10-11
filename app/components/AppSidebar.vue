@@ -50,11 +50,11 @@ const data = {
             items: [
                 {
                     title: 'All Location',
-                    url: '/dashboard/location'
+                    url: '/dashboard/locations'
                 },
                 {
                     title: 'Add Location',
-                    url: '#'
+                    url: '/dashboard/locations/add'
                 }
             ]
         },
