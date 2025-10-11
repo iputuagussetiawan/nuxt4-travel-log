@@ -26,9 +26,24 @@ import {
 } from '@/components/ui/empty'
 
 import { cn } from '~/lib/utils'
+import { Skeleton } from '~/components/ui/skeleton'
 
 const { data, status } = await useFetch('/api/locations', {
     lazy: true
+})
+
+const sidebarStore = useSidebarStore()
+
+watchEffect(() => {
+    if (data.value) {
+        sidebarStore.sidebarItems = data.value.map((location) => ({
+            id: `location-${location.id}`,
+            label: location.name,
+            icon: 'tabler:map-pin-filled',
+            href: '#'
+        }))
+    }
+    sidebarStore.loading = status.value === 'pending'
 })
 
 //2.modules init
@@ -60,7 +75,22 @@ definePageMeta({
                 </div>
             </div>
 
-            <div v-if="status === 'pending'">Loading...</div>
+            <div
+                v-if="status === 'pending'"
+                class="grid grid-cols-6 gap-4 mt-6"
+            >
+                <Card v-for="i in 12" :key="i">
+                    <CardHeader>
+                        <CardTitle>
+                            <Skeleton class="h-2 w-1/2" />
+                        </CardTitle>
+                        <CardDescription class="space-y-1">
+                            <Skeleton class="h-2 w-full" />
+                            <Skeleton class="h-2 w-1/2" />
+                        </CardDescription>
+                    </CardHeader>
+                </Card>
+            </div>
             <div
                 v-else-if="data && data.length > 0"
                 class="grid grid-cols-6 gap-4 mt-6"
@@ -73,9 +103,9 @@ definePageMeta({
                 >
                     <CardHeader>
                         <CardTitle>{{ location.name }}</CardTitle>
-                        <CardDescription>{{
-                            location.description
-                        }}</CardDescription>
+                        <CardDescription>
+                            {{ location.description }}
+                        </CardDescription>
                     </CardHeader>
                     <!-- <CardContent> sdfsdff </CardContent>
                     <CardFooter> sdfsd </CardFooter> -->
