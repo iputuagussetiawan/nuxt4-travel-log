@@ -1,7 +1,12 @@
 <script setup lang="ts">
 //1.modules import
 import { Button, buttonVariants } from '@/components/ui/button'
-import { ArrowUpRightIcon, LucideCirclePlus } from 'lucide-vue-next'
+import {
+    ArrowUpRightIcon,
+    FolderCode,
+    LucideCirclePlus,
+    MapPin
+} from 'lucide-vue-next'
 import {
     Card,
     CardContent,
@@ -56,7 +61,10 @@ definePageMeta({
             </div>
 
             <div v-if="status === 'pending'">Loading...</div>
-            <div v-else-if="data" class="grid grid-cols-6 gap-4 mt-6">
+            <div
+                v-else-if="data && data.length > 0"
+                class="grid grid-cols-6 gap-4 mt-6"
+            >
                 <!-- <pre>{{ data }}</pre> -->
                 <Card
                     v-for="location in data"
@@ -73,32 +81,41 @@ definePageMeta({
                     <CardFooter> sdfsd </CardFooter> -->
                 </Card>
             </div>
-            <div v-else>
+            <div v-else class="w-full">
                 <Empty>
                     <EmptyHeader>
                         <EmptyMedia variant="icon">
-                            <FolderCode />
+                            <MapPin class="w-10 h-10 text-muted-foreground" />
                         </EmptyMedia>
-                        <EmptyTitle>No Projects Yet</EmptyTitle>
+
+                        <EmptyTitle>No Locations Found</EmptyTitle>
                         <EmptyDescription>
-                            You haven't created any projects yet. Get started by
-                            creating your first project.
+                            You haven't added any locations yet. Start by
+                            creating your first one to begin tracking and
+                            managing your data.
                         </EmptyDescription>
                     </EmptyHeader>
+
                     <EmptyContent>
                         <div class="flex gap-2">
-                            <Button>Create Location</Button>
+                            <Button asChild>
+                                <NuxtLink to="/dashboard/locations/add">
+                                    Create Location
+                                </NuxtLink>
+                            </Button>
                         </div>
                     </EmptyContent>
+
                     <Button
                         variant="link"
-                        as-child
+                        asChild
                         class="text-muted-foreground"
                         size="sm"
                     >
-                        <a href="/dashboard">
-                            Learn More <ArrowUpRightIcon />
-                        </a>
+                        <NuxtLink to="/dashboard">
+                            Learn more about managing locations
+                            <ArrowUpRightIcon class="w-4 h-4 ml-1" />
+                        </NuxtLink>
                     </Button>
                 </Empty>
             </div>
