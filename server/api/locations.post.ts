@@ -1,6 +1,9 @@
+import { eq, type DrizzleError } from 'drizzle-orm'
 import { randomUUID } from 'node:crypto'
 import { db } from '~/db'
 import { InsertLocationSchema, location } from '~/db/schema'
+import slugify from 'slug'
+import { nanoid } from 'nanoid'
 
 export default defineEventHandler(async (event) => {
     if (!event.context.user) {
@@ -38,18 +41,36 @@ export default defineEventHandler(async (event) => {
             })
         )
     }
+    const slug = `${result.data.name}-${nanoid()}`
+    const newSlug = slugify(slug, {
+        lower: true
+    })
 
-    const [createdLocation] = await db
-        .insert(location)
-        .values({
-            ...result.data,
-            id: randomUUID(),
-            slug: result.data.name.replaceAll(' ', '-').toLowerCase(),
-            userId: event.context.user.id,
-            createdAt: new Date(),
-            updatedAt: new Date()
-        })
-        .returning()
-
-    return createdLocation
+    try {
+        const [createdLocation] = await db
+            .insert(location)
+            .values({
+                ...result.data,
+                id: randomUUID(),
+                slug: newSlug,
+                userId: event.context.user.id,
+                createdAt: new Date(),
+                updatedAt: new Date()
+            })
+            .returning()
+        return createdLocation
+    } catch (e) {
+        const error = e as DrizzleError
+        if (error.message) {
+            return sendError(
+                event,
+                createError({
+                    statusCode: 422,
+                    statusMessage: error.message
+                })
+            )
+        }
+        console.log('INSERT ERROR', error.message)
+        throw error
+    }
 })

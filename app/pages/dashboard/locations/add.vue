@@ -45,8 +45,8 @@ const onSubmit = handleSubmit(async (values) => {
         navigateTo(`/dashboard/locations`)
     } catch (e) {
         const error = e as FetchError
-        // console.log(error.data.data)
-        // console.error(error.statusMessage)
+        console.log(error.data.data)
+        console.error(error.statusMessage)
         submitError.value = error.statusMessage || 'An unknown error occurred'
     } finally {
         loading.value = false
