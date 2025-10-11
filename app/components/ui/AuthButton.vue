@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import Avatar from './avatar/Avatar.vue'
-import AvatarImage from './avatar/AvatarImage.vue'
+import UiUserAvatar from './UserAvatar.vue'
 import Button from './button/Button.vue'
 import DropdownMenu from './dropdown-menu/DropdownMenu.vue'
 import DropdownMenuContent from './dropdown-menu/DropdownMenuContent.vue'
@@ -12,26 +11,7 @@ const authStore = useAuthStore()
     <div>
         <DropdownMenu v-if="!authStore.loading && authStore.user">
             <DropdownMenuTrigger>
-                <div class="flex items-center gap-1">
-                    <Avatar>
-                        <AvatarImage
-                            v-if="authStore.user.image"
-                            :src="
-                                authStore.user.image ||
-                                'https://github.com/unovue.png'
-                            "
-                            :alt="authStore.user.name || 'User avatar'"
-                        />
-                        <AvatarFallback>
-                            {{
-                                authStore?.user?.name
-                                    ?.charAt(0)
-                                    ?.toUpperCase() || 'U'
-                            }}</AvatarFallback
-                        >
-                    </Avatar>
-                    {{ authStore.user.name }}
-                </div>
+                <UiUserAvatar />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                 <DropdownMenuItem>Profile</DropdownMenuItem>

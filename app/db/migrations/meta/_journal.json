@@ -15,6 +15,13 @@
       "when": 1759875801253,
       "tag": "0001_bizarre_synch",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1760146953660,
+      "tag": "0002_tan_puma",
+      "breakpoints": true
     }
   ]
 }

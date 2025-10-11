@@ -18,7 +18,7 @@ import {
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 
-import UiAuthButton from '~/components/ui/AuthButton.vue'
+import UiAuthButton from '@/components/ui/AuthButton.vue'
 
 const colorMode = useColorMode()
 
