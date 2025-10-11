@@ -3,17 +3,9 @@ import { InsertLocationSchema } from '~/db/schema'
 import slugify from 'slug'
 import { nanoid } from 'nanoid'
 import { findLocationByName, insertLocation } from '~/db/queries/location-query'
+import defineAuthenticatedEventHandler from '~/lib/define-authenticated-event-handler'
 
-export default defineEventHandler(async (event) => {
-    if (!event.context.user) {
-        return sendError(
-            event,
-            createError({
-                statusCode: 401,
-                statusMessage: 'Unauthorized'
-            })
-        )
-    }
+export default defineAuthenticatedEventHandler(async (event) => {
     const result = await readValidatedBody(
         event,
         InsertLocationSchema.safeParse
