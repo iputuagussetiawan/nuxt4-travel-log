@@ -13,20 +13,11 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator
 } from '~/components/ui/breadcrumb'
-import { Button } from '~/components/ui/button'
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
 import { Separator } from '~/components/ui/separator'
-import { Icon } from '@iconify/vue'
 import ThemeToggle from '~/components/ui/ThemeToggle.vue'
 
 const authStore = useAuthStore()
 await authStore.init()
-const colorMode = useColorMode()
 </script>
 <template>
     <SidebarProvider>
@@ -64,7 +55,7 @@ const colorMode = useColorMode()
                 </div>
             </header>
             <main>
-                <RouterView />
+                <slot />
             </main>
         </SidebarInset>
     </SidebarProvider>

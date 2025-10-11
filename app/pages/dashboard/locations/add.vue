@@ -15,7 +15,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { InsertLocationSchema } from '~/db/schema'
 import { Alert, AlertDescription, AlertTitle } from '~/components/ui/alert'
-import { AlertCircle } from 'lucide-vue-next'
+import { AlertCircle, ArrowLeft } from 'lucide-vue-next'
 
 //2.modules init
 const { $csrfFetch } = useNuxtApp()
@@ -45,9 +45,12 @@ const onSubmit = handleSubmit(async (values) => {
         navigateTo(`/dashboard/locations`)
     } catch (e) {
         const error = e as FetchError
-        // console.log(error.data.data)
-        // console.error(error.statusMessage)
-        submitError.value = error.statusMessage || 'An unknown error occurred'
+        console.log(error.data.data)
+        console.error(error.statusMessage)
+        submitError.value =
+            error.data?.statusMessage ||
+            error.statusMessage ||
+            'An unknown error occurred'
     } finally {
         loading.value = false
     }
@@ -68,8 +71,25 @@ onBeforeRouteLeave(() => {
 <template>
     <section>
         <div class="mt-4 px-4">
-            <h1 class="text-lg font-bold">Add Location</h1>
-            <p class="text-sm text-muted-foreground">Add a new location here</p>
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-lg font-bold">Add Location</h1>
+                    <p class="text-sm text-muted-foreground">
+                        Add a new location here
+                    </p>
+                </div>
+                <div>
+                    <Button
+                        :disabled="loading"
+                        type="button"
+                        variant="outline"
+                        @click="router.back()"
+                    >
+                        <ArrowLeft class="w-4 h-4" /> Back
+                    </Button>
+                </div>
+            </div>
+
             <div class="max-w-xl mx-auto">
                 <Alert v-if="submitError" variant="destructive" class="mb-4">
                     <AlertCircle class="w-4 h-4" />

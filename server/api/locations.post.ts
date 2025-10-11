@@ -1,17 +1,11 @@
-import { randomUUID } from 'node:crypto'
-import { db } from '~/db'
-import { InsertLocationSchema, location } from '~/db/schema'
+import { type DrizzleError } from 'drizzle-orm'
+import { InsertLocationSchema } from '~/db/schema'
+import slugify from 'slug'
+import { nanoid } from 'nanoid'
+import { findLocationByName, insertLocation } from '~/db/queries/location-query'
+import defineAuthenticatedEventHandler from '~/lib/define-authenticated-event-handler'
 
-export default defineEventHandler(async (event) => {
-    if (!event.context.user) {
-        return sendError(
-            event,
-            createError({
-                statusCode: 401,
-                statusMessage: 'Unauthorized'
-            })
-        )
-    }
+export default defineAuthenticatedEventHandler(async (event) => {
     const result = await readValidatedBody(
         event,
         InsertLocationSchema.safeParse
@@ -38,18 +32,40 @@ export default defineEventHandler(async (event) => {
             })
         )
     }
+    const slug = `${result.data.name}-${nanoid()}`
+    const newSlug = slugify(slug, {
+        lower: true
+    })
 
-    const [createdLocation] = await db
-        .insert(location)
-        .values({
-            ...result.data,
-            id: randomUUID(),
-            slug: result.data.name.replaceAll(' ', '-').toLowerCase(),
-            userId: event.context.user.id,
-            createdAt: new Date(),
-            updatedAt: new Date()
-        })
-        .returning()
+    const existingLocation = await findLocationByName(
+        result.data,
+        event.context.user.id
+    )
+    if (existingLocation.length > 0) {
+        return sendError(
+            event,
+            createError({
+                statusCode: 409,
+                statusMessage: 'Location already exists, try a different name'
+            })
+        )
+    }
 
-    return createdLocation
+    try {
+        //call query insert location from db/query
+        return insertLocation(result.data, newSlug, event.context.user.id)
+    } catch (e) {
+        const error = e as DrizzleError
+        if (error.message) {
+            return sendError(
+                event,
+                createError({
+                    statusCode: 422,
+                    statusMessage: error.message
+                })
+            )
+        }
+        console.log('INSERT ERROR', error.message)
+        throw error
+    }
 })

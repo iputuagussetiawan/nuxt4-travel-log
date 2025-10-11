@@ -3,26 +3,32 @@ import {
     pgTable,
     text,
     timestamp,
+    unique,
     uuid
 } from 'drizzle-orm/pg-core'
 import { user } from './auth-schema'
 import { createInsertSchema } from 'drizzle-zod'
-export const location = pgTable('location', {
-    id: text('id').primaryKey(),
-    name: text('name').notNull(),
-    description: text('description'),
-    slug: text('slug').notNull().unique(),
-    lat: doublePrecision('lat').notNull(),
-    long: doublePrecision('long').notNull(),
-    userId: text('user_id')
-        .notNull()
-        .references(() => user.id, { onDelete: 'cascade' }),
-    createdAt: timestamp('created_at').defaultNow().notNull(),
-    updatedAt: timestamp('updated_at')
-        .defaultNow()
-        .$onUpdate(() => /* @__PURE__ */ new Date())
-        .notNull()
-})
+import type z from 'zod'
+export const location = pgTable(
+    'location',
+    {
+        id: text('id').primaryKey(),
+        name: text('name').notNull(),
+        description: text('description'),
+        slug: text('slug').notNull().unique(),
+        lat: doublePrecision('lat').notNull(),
+        long: doublePrecision('long').notNull(),
+        userId: text('user_id')
+            .notNull()
+            .references(() => user.id, { onDelete: 'cascade' }),
+        createdAt: timestamp('created_at').defaultNow().notNull(),
+        updatedAt: timestamp('updated_at')
+            .defaultNow()
+            .$onUpdate(() => /* @__PURE__ */ new Date())
+            .notNull()
+    },
+    (t) => [unique().on(t.name, t.userId)]
+)
 
 export const InsertLocationSchema = createInsertSchema(location, {
     name: (field) => field.min(1).max(50),
@@ -38,3 +44,5 @@ export const InsertLocationSchema = createInsertSchema(location, {
     // lat: true,
     // long: true
 })
+
+export type InsertLocationSchema = z.infer<typeof InsertLocationSchema>
