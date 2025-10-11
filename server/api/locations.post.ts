@@ -1,4 +1,4 @@
-import { eq, type DrizzleError } from 'drizzle-orm'
+import { and, eq, type DrizzleError } from 'drizzle-orm'
 import { randomUUID } from 'node:crypto'
 import { db } from '~/db'
 import { InsertLocationSchema, location } from '~/db/schema'
@@ -45,6 +45,26 @@ export default defineEventHandler(async (event) => {
     const newSlug = slugify(slug, {
         lower: true
     })
+
+    const existingLocation = await db
+        .select()
+        .from(location)
+        .where(
+            and(
+                eq(location.name, result.data.name),
+                eq(location.userId, event.context.user.id)
+            )
+        )
+        .limit(1)
+    if (existingLocation.length > 0) {
+        return sendError(
+            event,
+            createError({
+                statusCode: 409,
+                statusMessage: 'Location already exists, try a different name'
+            })
+        )
+    }
 
     try {
         const [createdLocation] = await db
