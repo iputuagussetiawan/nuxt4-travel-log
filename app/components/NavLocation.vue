@@ -56,8 +56,8 @@ const mapStore = useMapStore()
                                     v-for="subItem in sidebarStore.sidebarItems"
                                     :key="subItem.id"
                                     :class="
-                                        mapStore.selectedPoint ===
-                                        subItem.location
+                                        mapStore.selectedPoint?.id ===
+                                        subItem.location?.id
                                             ? 'text-green-600'
                                             : ''
                                     "
