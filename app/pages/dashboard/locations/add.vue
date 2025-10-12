@@ -144,7 +144,7 @@ onBeforeRouteLeave(() => {
                                 <FormLabel>Latitude</FormLabel>
                                 <FormControl>
                                     <Input
-                                        type="number"
+                                        type="text"
                                         placeholder="Latitude"
                                         v-bind="componentField"
                                     />
@@ -161,7 +161,7 @@ onBeforeRouteLeave(() => {
                                 <FormLabel>Longitude</FormLabel>
                                 <FormControl>
                                     <Input
-                                        type="number"
+                                        type="text"
                                         placeholder="Longitude"
                                         v-bind="componentField"
                                     />

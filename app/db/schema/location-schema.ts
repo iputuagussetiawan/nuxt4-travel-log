@@ -16,8 +16,8 @@ export const location = pgTable(
         name: text('name').notNull(),
         description: text('description'),
         slug: text('slug').notNull().unique(),
-        lat: doublePrecision('lat').notNull(),
-        long: doublePrecision('long').notNull(),
+        lat: text('lat').notNull(),
+        long: text('long').notNull(),
         userId: text('user_id')
             .notNull()
             .references(() => user.id, { onDelete: 'cascade' }),
@@ -32,9 +32,9 @@ export const location = pgTable(
 
 export const InsertLocationSchema = createInsertSchema(location, {
     name: (field) => field.min(1).max(50),
-    description: (field) => field.min(1).max(50),
-    lat: (field) => field.min(-90).max(90),
-    long: (field) => field.min(-180).max(180)
+    description: (field) => field.min(1).max(50)
+    // lat: (field) => field.min(-90).max(90),
+    // long: (field) => field.min(-180).max(180)
 }).omit({
     id: true,
     slug: true,

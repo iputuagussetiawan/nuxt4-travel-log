@@ -20,7 +20,8 @@ export default defineNuxtConfig({
         '@nuxtjs/color-mode',
         'nuxt-lucide-icons',
         '@pinia/nuxt',
-        'nuxt-csurf'
+        'nuxt-csurf',
+        '@nuxtjs/leaflet'
     ],
     csurf: {
         // optional

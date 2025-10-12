@@ -25,6 +25,8 @@ import {
     EmptyTitle
 } from '@/components/ui/empty'
 
+import MapClient from '~/components/MapClient.vue'
+
 import { cn } from '~/lib/utils'
 import { Skeleton } from '~/components/ui/skeleton'
 const locationsStore = useLocationsStore()
@@ -65,7 +67,6 @@ onMounted(() => {
                     </NuxtLink>
                 </div>
             </div>
-
             <div
                 v-if="status === 'pending'"
                 class="grid grid-cols-6 gap-4 mt-6"
@@ -139,6 +140,11 @@ onMounted(() => {
                         </NuxtLink>
                     </Button>
                 </Empty>
+            </div>
+            <div class="mt-6">
+                <ClientOnly fallback-tag="span" fallback="Loading Map...">
+                    <MapClient />
+                </ClientOnly>
             </div>
         </div>
     </section>
