@@ -2,7 +2,7 @@ import { betterAuth, type User } from 'better-auth'
 import { createAuthMiddleware } from 'better-auth/plugins'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { db } from '@/db' // your drizzle instance
-import * as schema from '../db/schema'
+import * as schema from '@/db/schema'
 import env from './env'
 
 export type UserWithId = Omit<User, 'id'> & {
@@ -30,7 +30,8 @@ export const auth = betterAuth({
     socialProviders: {
         github: {
             clientId: env.GITHUB_CLIENT_ID!,
-            clientSecret: env.GITHUB_CLIENT_SECRET!
+            clientSecret: env.GITHUB_CLIENT_SECRET!,
+            disableImplicitSignUp: false
         }
     }
 })
