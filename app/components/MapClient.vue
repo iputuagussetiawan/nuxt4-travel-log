@@ -44,11 +44,14 @@ onMounted(() => {
                 :popup-anchor="[0, -30]"
                 class-name="my-custom-marker"
             >
-                <UiMapPinMarker :label="point.label" />
+                <UiMapPinMarker
+                    :label="point.name"
+                    :active="mapStore.selectedPoint?.id === point.id"
+                />
             </LIcon>
             <LPopup>
                 <div>
-                    <h3 class="text-2xl mb-1">{{ point.label }}</h3>
+                    <h3 class="text-2xl mb-1">{{ point.name }}</h3>
                     <div class="text-sm m-0" v-if="point.description">
                         {{ point.description }}
                     </div>

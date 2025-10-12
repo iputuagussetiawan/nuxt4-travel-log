@@ -1,15 +1,18 @@
 <script lang="ts" setup>
 interface MapPinMarkerProps {
     label: string
+    active: boolean
 }
 const mapPin = '/map-pin-red.svg'
 const mapPinDark = '/map-pin.svg'
+const mapPinActive = '/map-pin-blue.svg'
 const colorMode = useColorMode()
 const props = defineProps<MapPinMarkerProps>()
 
-const pinUrl = computed(() =>
-    colorMode.preference === 'dark' ? mapPinDark : mapPin
-)
+const pinUrl = computed(() => {
+    if (props.active) return mapPinActive
+    return colorMode.value === 'dark' ? mapPinDark : mapPin
+})
 </script>
 <template>
     <div class="custom-marker">
