@@ -10,19 +10,19 @@ export type UserWithId = Omit<User, 'id'> & {
 }
 
 export const auth = betterAuth({
-    hooks: {
-        after: createAuthMiddleware(async (ctx) => {
-            if (ctx.path === 'get-session') {
-                if (!ctx.context.session) {
-                    return ctx.json({
-                        session: null,
-                        user: null
-                    })
-                }
-                return ctx.json(ctx.context.session)
-            }
-        })
-    },
+    // hooks: {
+    //     after: createAuthMiddleware(async (ctx) => {
+    //         if (ctx.path === 'get-session') {
+    //             if (!ctx.context.session) {
+    //                 return ctx.json({
+    //                     session: null,
+    //                     user: null
+    //                 })
+    //             }
+    //             return ctx.json(ctx.context.session)
+    //         }
+    //     })
+    // },
     database: drizzleAdapter(db, {
         schema,
         provider: 'pg' // or "mysql", "sqlite"
