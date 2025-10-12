@@ -13,7 +13,7 @@ const mapUrl = computed(() =>
 )
 
 onMounted(() => {
-    mapStore.init()
+    // mapStore.init()
 })
 </script>
 <template>
@@ -44,10 +44,15 @@ onMounted(() => {
                 :popup-anchor="[0, -30]"
                 class-name="my-custom-marker"
             >
-                <UiMapPinMarker
-                    :label="point.name"
-                    :active="mapStore.selectedPoint?.id === point.id"
-                />
+                <div
+                    @mouseenter="mapStore.selectedPoint = point"
+                    @mouseleave="mapStore.selectedPoint = null"
+                >
+                    <UiMapPinMarker
+                        :label="point.name"
+                        :active="mapStore.selectedPoint?.id === point.id"
+                    />
+                </div>
             </LIcon>
             <LPopup>
                 <div>

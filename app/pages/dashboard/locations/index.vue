@@ -29,6 +29,7 @@ import MapClient from '~/components/MapClient.vue'
 
 import { cn } from '~/lib/utils'
 import { Skeleton } from '~/components/ui/skeleton'
+import MapClient2 from '~/components/MapClient2.vue'
 const locationsStore = useLocationsStore()
 const { locations, status } = storeToRefs(locationsStore)
 
@@ -89,11 +90,10 @@ onMounted(() => {
                 v-else-if="locations && locations.length > 0"
                 class="grid grid-cols-6 gap-4 mt-6"
             >
-                <!-- <pre>{{ data }}</pre> -->
                 <Card
                     v-for="location in locations"
                     :key="location.id"
-                    @mouseenter="mapStore.selectedPoint = location"
+                    @click="mapStore.selectedPoint = location"
                     @mouseleave="mapStore.selectedPoint = null"
                     class="bg-primary/10 hover:bg-primary/20 cursor-pointer transition-all duration-400 ease-in-out"
                     :class="{
@@ -150,8 +150,12 @@ onMounted(() => {
                 </Empty>
             </div>
             <div class="mt-6">
-                <ClientOnly fallback-tag="span" fallback="Loading Map...">
+                <!-- <ClientOnly fallback-tag="span" fallback="Loading Map...">
                     <MapClient />
+                </ClientOnly> -->
+
+                <ClientOnly fallback-tag="span" fallback="Loading Map...">
+                    <MapClient2 />
                 </ClientOnly>
             </div>
         </div>
