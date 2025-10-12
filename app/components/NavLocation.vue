@@ -18,6 +18,7 @@ import {
 import { Skeleton } from './ui/skeleton'
 
 const sidebarStore = useSidebarStore()
+const mapStore = useMapStore()
 </script>
 
 <template>
@@ -54,9 +55,20 @@ const sidebarStore = useSidebarStore()
                                 <SidebarMenuSubItem
                                     v-for="subItem in sidebarStore.sidebarItems"
                                     :key="subItem.id"
+                                    :class="
+                                        mapStore.selectedPoint ===
+                                        subItem.location
+                                            ? 'text-green-600'
+                                            : ''
+                                    "
+                                    @mouseenter="
+                                        mapStore.selectedPoint =
+                                            subItem.location ?? null
+                                    "
+                                    @mouseleave="mapStore.selectedPoint = null"
                                 >
                                     <SidebarMenuSubButton as-child>
-                                        <NuxtLink>
+                                        <NuxtLink :to="subItem.href">
                                             <span>{{ subItem.label }}</span>
                                         </NuxtLink>
                                     </SidebarMenuSubButton>
