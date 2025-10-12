@@ -32,6 +32,8 @@ import { Skeleton } from '~/components/ui/skeleton'
 const locationsStore = useLocationsStore()
 const { locations, status } = storeToRefs(locationsStore)
 
+const mapStore = useMapStore()
+
 //2.modules init
 definePageMeta({
     layout: 'dashboard'
@@ -91,7 +93,13 @@ onMounted(() => {
                 <Card
                     v-for="location in locations"
                     :key="location.id"
+                    @mouseenter="mapStore.selectedPoint = location"
+                    @mouseleave="mapStore.selectedPoint = null"
                     class="bg-primary/10 hover:bg-primary/20 cursor-pointer transition-all duration-400 ease-in-out"
+                    :class="{
+                        'border-primary':
+                            location.id === mapStore.selectedPoint?.id
+                    }"
                 >
                     <CardHeader>
                         <CardTitle>{{ location.name }}</CardTitle>

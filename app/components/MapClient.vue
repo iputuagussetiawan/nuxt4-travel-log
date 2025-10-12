@@ -48,7 +48,10 @@ onMounted(() => {
             </LIcon>
             <LPopup>
                 <div>
-                    <h3 class="text-2xl">{{ point.label }}</h3>
+                    <h3 class="text-2xl mb-1">{{ point.label }}</h3>
+                    <div class="text-sm m-0" v-if="point.description">
+                        {{ point.description }}
+                    </div>
                 </div>
             </LPopup>
         </LMarker>

@@ -24,7 +24,7 @@ const pinUrl = computed(() =>
         <div class="custom-marker__popup-container">
             <div class="custom-marker__popup">
                 {{ props.label }}
-                <svg
+                <!-- <svg
                     class="custom-marker__arrow-down"
                     width="23"
                     height="17"
@@ -36,7 +36,7 @@ const pinUrl = computed(() =>
                         d="M9.76915 16.0103C10.5395 17.3409 12.4605 17.3409 13.2309 16.0103L22.5 0H0.5L9.76915 16.0103Z"
                         fill="#1E293B"
                     />
-                </svg>
+                </svg> -->
             </div>
         </div>
     </div>

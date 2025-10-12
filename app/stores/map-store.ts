@@ -2,6 +2,7 @@ import type { MapPoint } from '~/lib/type'
 
 export const useMapStore = defineStore('useMapStore', () => {
     const mapPoints = ref<MapPoint[]>([])
+    const selectedPoint = ref<MapPoint | null>(null)
 
     async function init() {
         const L = await import('leaflet')
@@ -30,6 +31,7 @@ export const useMapStore = defineStore('useMapStore', () => {
 
     return {
         init,
-        mapPoints
+        mapPoints,
+        selectedPoint
     }
 })
