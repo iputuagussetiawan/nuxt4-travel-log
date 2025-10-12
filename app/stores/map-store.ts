@@ -3,6 +3,9 @@ import type { MapPoint } from '~/lib/type'
 export const useMapStore = defineStore('useMapStore', () => {
     const mapPoints = ref<MapPoint[]>([])
     const selectedPoint = ref<MapPoint | null>(null)
+    const mapPin = '/map-pin-red.svg'
+    const mapPinDark = '/map-pin.svg'
+    const mapPinActive = '/map-pin-blue.svg'
     // ✅ Called once to create and render the Leaflet map
     async function initMap(mapContainerId: string, mapUrl: Ref<string>) {
         const L = await import('leaflet')
@@ -42,8 +45,28 @@ export const useMapStore = defineStore('useMapStore', () => {
 
                 // Add new markers
                 points.forEach((p) => {
+                    let mapPinUrl = mapPin
+                    if (selectedPoint.value?.id === p.id) {
+                        mapPinUrl = mapPinActive
+                    } else {
+                        mapPinUrl = mapPin
+                    }
+                    const icon = L.divIcon({
+                        html: `
+                            <div class="custom-marker">
+                                <div class="marker-inner">
+                                    <img class="custom-marker__image" src="${mapPinUrl}" alt="${p.name}" />
+                                </div>
+                            </div>
+                        `,
+                        className: '', // ❗ prevent Leaflet’s default icon styling
+                        iconSize: [30, 30],
+                        iconAnchor: [15, 30],
+                        popupAnchor: [0, -35] // 👈 move popup 35px above the icon
+                    })
                     const marker = L.marker([Number(p.lat), Number(p.long)], {
-                        title: p.name
+                        title: p.name,
+                        icon
                     }).addTo(map)
 
                     // Optional popup
@@ -80,10 +103,10 @@ export const useMapStore = defineStore('useMapStore', () => {
                     // You can use flyTo for a smoother zoom + pan animation
                     map.flyTo(
                         [Number(point.lat), Number(point.long)],
-                        10, // 👈 your desired zoom level
+                        14, // 👈 your desired zoom level
                         {
                             animate: true,
-                            duration: 0.8 // smooth transition
+                            duration: 4 // smooth transition
                         }
                     )
                 }
