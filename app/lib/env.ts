@@ -7,7 +7,8 @@ const envSchema = z.object({
     DATABASE_URL: z.string(),
     BETTER_AUTH_URL: z.string(),
     GITHUB_CLIENT_ID: z.string(),
-    GITHUB_CLIENT_SECRET: z.string()
+    GITHUB_CLIENT_SECRET: z.string(),
+    GITHUB_CALLBACK_URL: z.string()
 })
 
 tryParseEnv(envSchema)

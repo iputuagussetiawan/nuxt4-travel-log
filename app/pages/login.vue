@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { authClient } from '@/lib/auth-client'
+import env from '../lib/env'
 const session = authClient.useSession()
 
 const router = useRouter()
@@ -13,7 +14,7 @@ async function handleLogin() {
 
         await authClient.signIn.social({
             provider: 'github',
-            callbackURL: '/dashboard',
+            callbackURL: env.GITHUB_CALLBACK_URL,
             errorCallbackURL: '/error',
             newUserCallbackURL: '/profile',
             disableRedirect: true // important: prevents automatic redirect
@@ -36,7 +37,7 @@ async function handleLogin() {
                 () =>
                     authClient.signIn.social({
                         provider: 'github',
-                        callbackURL: '/dashboard',
+                        callbackURL: env.GITHUB_CALLBACK_URL,
                         errorCallbackURL: '/error',
                         newUserCallbackURL: '/profile'
                     })
