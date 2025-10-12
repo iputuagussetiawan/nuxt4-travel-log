@@ -3,6 +3,7 @@ import type { MapPoint } from '~/lib/type'
 export const useMapStore = defineStore('useMapStore', () => {
     const mapPoints = ref<MapPoint[]>([])
     const selectedPoint = ref<MapPoint | null>(null)
+    const addedPoint = ref<MapPoint | null>(null)
     const mapPin = '/map-pin-red.svg'
     const mapPinDark = '/map-pin.svg'
     const mapPinActive = '/map-pin-blue.svg'
@@ -45,17 +46,11 @@ export const useMapStore = defineStore('useMapStore', () => {
 
                 // Add new markers
                 points.forEach((p) => {
-                    let mapPinUrl = mapPin
-                    if (selectedPoint.value?.id === p.id) {
-                        mapPinUrl = mapPinActive
-                    } else {
-                        mapPinUrl = mapPin
-                    }
                     const icon = L.divIcon({
                         html: `
                             <div class="custom-marker">
                                 <div class="marker-inner">
-                                    <img class="custom-marker__image" src="${mapPinUrl}" alt="${p.name}" />
+                                    <img class="custom-marker__image" src="${mapPinDark}" alt="${p.name}" />
                                 </div>
                             </div>
                         `,
@@ -66,7 +61,8 @@ export const useMapStore = defineStore('useMapStore', () => {
                     })
                     const marker = L.marker([Number(p.lat), Number(p.long)], {
                         title: p.name,
-                        icon
+                        icon,
+                        draggable: true
                     }).addTo(map)
 
                     // Optional popup
@@ -81,7 +77,38 @@ export const useMapStore = defineStore('useMapStore', () => {
                         selectedPoint.value = p
                     })
 
-                    // markers.value.push(marker)
+                    marker.on('dragend', () => {
+                        const newPos = marker.getLatLng()
+                        console.log(
+                            '📍 Marker dragged to:',
+                            newPos.lat,
+                            newPos.lng
+                        )
+                    })
+                })
+
+                const newMarkerIcon = L.divIcon({
+                    html: `
+                            <div class="custom-marker">
+                                <div class="marker-inner">
+                                    <img class="custom-marker__image" src="${mapPinActive}" alt="New Marker" />
+                                </div>
+                            </div>
+                        `,
+                    className: '', // ❗ prevent Leaflet’s default icon styling
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -35] // 👈 move popup 35px above the icon
+                })
+                const newMarker = L.marker([0, 1], {
+                    title: 'New Marker',
+                    icon: newMarkerIcon,
+                    draggable: true
+                }).addTo(map)
+
+                newMarker.on('dragend', () => {
+                    const newPos = newMarker.getLatLng()
+                    console.log('📍 Marker dragged to:', newPos.lat, newPos.lng)
                 })
 
                 // Fit bounds
@@ -118,6 +145,7 @@ export const useMapStore = defineStore('useMapStore', () => {
     return {
         mapPoints,
         selectedPoint,
-        initMap
+        initMap,
+        addedPoint
     }
 })

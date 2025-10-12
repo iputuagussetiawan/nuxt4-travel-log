@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { LucideRocket } from 'lucide-vue-next'
-import AppAlert from '~/components/AppAlert.vue'
 import Button from '~/components/ui/button/Button.vue'
 </script>
 

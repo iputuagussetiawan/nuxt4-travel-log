@@ -16,6 +16,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { InsertLocationSchema } from '~/db/schema'
 import { Alert, AlertDescription, AlertTitle } from '~/components/ui/alert'
 import { AlertCircle, ArrowLeft } from 'lucide-vue-next'
+import { id } from 'zod/v4/locales'
 
 //2.modules init
 const { $csrfFetch } = useNuxtApp()
@@ -31,6 +32,8 @@ const formSchema = toTypedSchema(InsertLocationSchema)
 const { isFieldDirty, handleSubmit, meta } = useForm({
     validationSchema: formSchema
 })
+
+const mapStore = useMapStore()
 
 //3.methods
 const onSubmit = handleSubmit(async (values) => {
@@ -64,7 +67,19 @@ onBeforeRouteLeave(() => {
             return false
         }
     }
+
+    mapStore.addedPoint = null
     return true
+})
+
+onMounted(() => {
+    mapStore.addedPoint = {
+        id: '0',
+        name: '',
+        description: '',
+        lat: '0',
+        long: '1'
+    }
 })
 </script>
 
