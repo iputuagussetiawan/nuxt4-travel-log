@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { authClient } from '@/lib/auth-client'
-import env from '../lib/env'
 const session = authClient.useSession()
 
 const router = useRouter()
