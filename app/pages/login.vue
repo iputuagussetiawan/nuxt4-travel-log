@@ -14,7 +14,7 @@ async function handleLogin() {
 
         await authClient.signIn.social({
             provider: 'github',
-            callbackURL: env.GITHUB_CALLBACK_URL,
+            callbackURL: process.env.GITHUB_CALLBACK_URL,
             errorCallbackURL: '/error',
             newUserCallbackURL: '/profile',
             disableRedirect: true // important: prevents automatic redirect
@@ -37,7 +37,7 @@ async function handleLogin() {
                 () =>
                     authClient.signIn.social({
                         provider: 'github',
-                        callbackURL: env.GITHUB_CALLBACK_URL,
+                        callbackURL: process.env.GITHUB_CALLBACK_URL,
                         errorCallbackURL: '/error',
                         newUserCallbackURL: '/profile'
                     })

@@ -1,5 +1,4 @@
 import { createAuthClient } from 'better-auth/vue'
-import env from '~/lib/env'
 const authClient = createAuthClient()
 
 export const useAuthStore = defineStore('useAuthStore', () => {
@@ -18,7 +17,7 @@ export const useAuthStore = defineStore('useAuthStore', () => {
         headers.append('csrf-token', csrf)
         await authClient.signIn.social({
             provider: 'github',
-            callbackURL: env.GITHUB_CALLBACK_URL,
+            callbackURL: process.env.GITHUB_CALLBACK_URL,
             errorCallbackURL: '/error',
             newUserCallbackURL: '/profile',
             fetchOptions: {
