@@ -37,7 +37,6 @@ async function handleLogin() {
                 () =>
                     authClient.signIn.social({
                         provider: 'github',
-                        callbackURL: process.env.GITHUB_CALLBACK_URL,
                         errorCallbackURL: '/error',
                         newUserCallbackURL: '/profile'
                     })
