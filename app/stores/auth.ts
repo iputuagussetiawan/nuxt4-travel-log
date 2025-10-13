@@ -17,7 +17,7 @@ export const useAuthStore = defineStore('useAuthStore', () => {
         headers.append('csrf-token', csrf)
         await authClient.signIn.social({
             provider: 'github',
-            callbackURL: '/dashboard',
+            callbackURL: process.env.GITHUB_CALLBACK_URL,
             errorCallbackURL: '/error',
             newUserCallbackURL: '/profile',
             fetchOptions: {
