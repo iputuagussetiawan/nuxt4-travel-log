@@ -3,6 +3,11 @@ import tailwindcss from '@tailwindcss/vite'
 import './app/lib/env'
 
 export default defineNuxtConfig({
+    runtimeConfig: {
+        public: {
+            GITHUB_CALLBACK_URL: process.env.GITHUB_CALLBACK_URL
+        }
+    },
     compatibilityDate: '2025-07-15',
     devtools: { enabled: true },
     alias: {
@@ -25,7 +30,7 @@ export default defineNuxtConfig({
     ],
     csurf: {
         // optional
-        https: false, // default true if in production
+        https: true, // default true if in production
         cookieKey: '', // "__Host-csrf" if https is true otherwise just "csrf"
         cookie: {
             // CookieSerializeOptions from unjs/cookie-es

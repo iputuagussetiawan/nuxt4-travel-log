@@ -12,12 +12,14 @@ export const useAuthStore = defineStore('useAuthStore', () => {
     const user = computed(() => session.value?.data?.user)
     const loading = computed(() => session.value?.isPending)
     async function signIn() {
+        const config = useRuntimeConfig()
+        const callbackURL = config.public.GITHUB_CALLBACK_URL
         const { csrf } = useCsrf()
         const headers = new Headers()
         headers.append('csrf-token', csrf)
         await authClient.signIn.social({
             provider: 'github',
-            callbackURL: process.env.GITHUB_CALLBACK_URL,
+            callbackURL: callbackURL,
             errorCallbackURL: '/error',
             newUserCallbackURL: '/profile',
             fetchOptions: {
